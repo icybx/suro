@@ -743,7 +743,7 @@
   </footer>
 
   <script>
-    function handleSignup(inputId, successId) {
+    async function handleSignup(inputId, successId) {
       const input = document.getElementById(inputId);
       const success = document.getElementById(successId);
       const email = input.value.trim();
@@ -754,9 +754,24 @@
         return;
       }
 
-      input.style.display = 'none';
-      input.closest('.signup-form, .cta-form').querySelector('button').style.display = 'none';
-      success.style.display = 'block';
+      try {
+        const response = await fetch('https://web-production-861df.up.railway.app/waitlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+
+        const data = await response.json();
+        input.closest('.signup-form, .cta-form').querySelector('input').style.display = 'none';
+        input.closest('.signup-form, .cta-form').querySelector('button').style.display = 'none';
+        success.style.display = 'block';
+        success.textContent = '🌿 ' + data.message;
+
+      } catch (error) {
+        success.style.display = 'block';
+        success.style.color = '#C47A7A';
+        success.textContent = 'Something went wrong. Please try again.';
+      }
     }
   </script>
 
