@@ -8,6 +8,11 @@ import re
 
 load_dotenv()
 
+required_vars = ["SUPABASE_URL", "SUPABASE_SERVICE_KEY"]
+for var in required_vars:
+    if not os.getenv(var):
+        raise EnvironmentError(f"Missing required environment variable: {var}")
+
 app = FastAPI()
 
 # Security — only allow requests from getsuro.com
