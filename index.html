@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Suro — Clarity for Etsy Sellers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F7F3EE;
+      --ink: #1A1612;
+      --sage: #7A9E7E;
+      --sage-light: #B8D4BB;
+      --warm: #C4956A;
+      --warm-light: #F0DFD0;
+      --muted: #8A8078;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--cream);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 4rem;
+      background: rgba(247, 243, 238, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(26,22,18,0.07);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+
+    .logo span { color: var(--sage); }
+
+    nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    nav a:hover { opacity: 1; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 8rem 4rem 4rem;
+      gap: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, var(--sage-light) 0%, transparent 70%);
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -100px; left: 10%;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, var(--warm-light) 0%, transparent 70%);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .hero-left {
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 0.9s ease both;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 1.5rem;
+    }
+
+    .eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--sage);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 5vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--sage);
+    }
+
+    .hero-desc {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: var(--muted);
+      max-width: 440px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* EMAIL FORM */
+    .signup-form {
+      display: flex;
+      gap: 0;
+      max-width: 440px;
+      border: 1.5px solid var(--ink);
+      border-radius: 4px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 4px 4px 0px var(--ink);
+      transition: box-shadow 0.2s;
+    }
+
+    .signup-form:focus-within {
+      box-shadow: 6px 6px 0px var(--sage);
+    }
+
+    .signup-form input {
+      flex: 1;
+      padding: 1rem 1.25rem;
+      border: none;
+      outline: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      background: transparent;
+      color: var(--ink);
+    }
+
+    .signup-form input::placeholder { color: var(--muted); }
+
+    .signup-form button {
+      padding: 1rem 1.5rem;
+      background: var(--ink);
+      color: var(--cream);
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+
+    .signup-form button:hover { background: var(--sage); }
+
+    .form-note {
+      margin-top: 0.75rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* HERO RIGHT — DASHBOARD MOCKUP */
+    .hero-right {
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 0.9s 0.2s ease both;
+    }
+
+    .mockup-card {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid rgba(26,22,18,0.08);
+      box-shadow: 0 24px 60px rgba(26,22,18,0.1), 0 4px 16px rgba(26,22,18,0.06);
+    }
+
+    .mockup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .mockup-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .mockup-badge {
+      font-size: 0.7rem;
+      font-weight: 500;
+      background: var(--sage-light);
+      color: var(--sage);
+      padding: 0.25rem 0.75rem;
+      border-radius: 100px;
+      letter-spacing: 0.04em;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-box {
+      background: var(--cream);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .stat-value.green { color: var(--sage); }
+    .stat-value.warm { color: var(--warm); }
+
+    .stat-change {
+      font-size: 0.68rem;
+      color: var(--sage);
+      margin-top: 0.2rem;
+    }
+
+    .listings-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .listing-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid rgba(26,22,18,0.05);
+    }
+
+    .listing-row:last-child { border-bottom: none; }
+
+    .listing-name {
+      font-size: 0.82rem;
+      color: var(--ink);
+      font-weight: 400;
+    }
+
+    .listing-fees {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    .listing-profit {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--sage);
+    }
+
+    .listing-profit.loss { color: #C47A7A; }
+
+    .profit-bar-wrap {
+      width: 60px;
+      height: 4px;
+      background: rgba(26,22,18,0.07);
+      border-radius: 2px;
+      margin-left: 1rem;
+      overflow: hidden;
+    }
+
+    .profit-bar {
+      height: 100%;
+      border-radius: 2px;
+      background: var(--sage);
+    }
+
+    /* FEATURES */
+    .features {
+      padding: 7rem 4rem;
+      position: relative;
+    }
+
+    .section-eyebrow {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 1rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      max-width: 500px;
+      margin: 0 auto 4rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      border: 1px solid rgba(26,22,18,0.07);
+      transition: transform 0.25s, box-shadow 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--sage);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(26,22,18,0.1); }
+    .feature-card:hover::before { transform: scaleX(1); }
+
+    .feature-icon {
+      width: 48px; height: 48px;
+      background: var(--warm-light);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+    }
+
+    .feature-desc {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    /* HOW IT WORKS */
+    .how {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 7rem 4rem;
+    }
+
+    .how .section-eyebrow { color: var(--sage-light); }
+    .how .section-title { color: var(--cream); }
+    .how .section-sub { color: rgba(247,243,238,0.6); }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 24px; left: 15%; right: 15%;
+      height: 1px;
+      background: rgba(247,243,238,0.15);
+    }
+
+    .step { text-align: center; }
+
+    .step-num {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: var(--sage);
+      color: white;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 0.75rem;
+    }
+
+    .step-desc {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: rgba(247,243,238,0.6);
+    }
+
+    /* CTA */
+    .cta {
+      padding: 7rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px; height: 400px;
+      background: radial-gradient(ellipse, var(--sage-light) 0%, transparent 70%);
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .cta .section-title { margin-bottom: 1rem; }
+    .cta .section-sub { margin-bottom: 2.5rem; }
+
+    .cta-form {
+      display: flex;
+      gap: 0;
+      max-width: 420px;
+      margin: 0 auto;
+      border: 1.5px solid var(--ink);
+      border-radius: 4px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 4px 4px 0px var(--ink);
+      transition: box-shadow 0.2s;
+    }
+
+    .cta-form:focus-within { box-shadow: 6px 6px 0px var(--sage); }
+
+    .cta-form input {
+      flex: 1;
+      padding: 1rem 1.25rem;
+      border: none;
+      outline: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--ink);
+    }
+
+    .cta-form input::placeholder { color: var(--muted); }
+
+    .cta-form button {
+      padding: 1rem 1.5rem;
+      background: var(--ink);
+      color: var(--cream);
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+
+    .cta-form button:hover { background: var(--sage); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid rgba(26,22,18,0.08);
+      padding: 2rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer .logo { font-size: 1.2rem; }
+
+    .footer-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* SUCCESS STATE */
+    .success-msg {
+      display: none;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--sage);
+      font-weight: 500;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 1.25rem 2rem; }
+      .hero { grid-template-columns: 1fr; padding: 7rem 2rem 4rem; }
+      .hero-right { display: none; }
+      .features { padding: 5rem 2rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .how { padding: 5rem 2rem; }
+      .steps { grid-template-columns: 1fr; }
+      .steps::before { display: none; }
+      .cta { padding: 5rem 2rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">Su<span>r</span>o</div>
+    <a href="#early-access">Get Early Access</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="eyebrow">For Etsy Sellers</div>
+      <h1>Finally know your <em>real</em> profit.</h1>
+      <p class="hero-desc">
+        Etsy fees are layered, confusing, and quietly eating your margins. Suro gives you instant clarity — upload your Etsy CSV and see exactly what you actually made, per listing, after every fee.
+      </p>
+      <div class="signup-form">
+        <input type="email" id="hero-email" placeholder="your@email.com" />
+        <button onclick="handleSignup('hero-email', 'hero-success')">Get Early Access</button>
+      </div>
+      <div class="success-msg" id="hero-success">🌿 You're on the list — we'll be in touch soon!</div>
+      <p class="form-note">No credit card. No spam. Just clarity.</p>
+    </div>
+
+    <div class="hero-right">
+      <div class="mockup-card">
+        <div class="mockup-header">
+          <div class="mockup-title">March Overview</div>
+          <div class="mockup-badge">✓ All fees accounted</div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-label">Revenue</div>
+            <div class="stat-value">$1,840</div>
+            <div class="stat-change">↑ 12% vs Feb</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Etsy Fees</div>
+            <div class="stat-value warm">$312</div>
+            <div class="stat-change" style="color:var(--warm)">17% of revenue</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">True Profit</div>
+            <div class="stat-value green">$894</div>
+            <div class="stat-change">After all costs</div>
+          </div>
+        </div>
+        <div class="listings-label">Profit per listing</div>
+        <div class="listing-row">
+          <div>
+            <div class="listing-name">Ceramic Pour-Over Set</div>
+            <div class="listing-fees">$3.20 in fees</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem">
+            <div class="listing-profit">+$18.40</div>
+            <div class="profit-bar-wrap"><div class="profit-bar" style="width:85%"></div></div>
+          </div>
+        </div>
+        <div class="listing-row">
+          <div>
+            <div class="listing-name">Linen Tote Bag</div>
+            <div class="listing-fees">$2.10 in fees</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem">
+            <div class="listing-profit">+$11.20</div>
+            <div class="profit-bar-wrap"><div class="profit-bar" style="width:60%"></div></div>
+          </div>
+        </div>
+        <div class="listing-row">
+          <div>
+            <div class="listing-name">Pressed Flower Print</div>
+            <div class="listing-fees">$4.80 in fees + offsite ad</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem">
+            <div class="listing-profit loss">-$2.30</div>
+            <div class="profit-bar-wrap"><div class="profit-bar" style="width:10%;background:#C47A7A"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="section-eyebrow">What Suro does</div>
+    <h2 class="section-title">Stop guessing. Start knowing.</h2>
+    <p class="section-sub">Upload your Etsy CSV and get a complete financial picture in seconds — no spreadsheet required.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">True Profit Per Listing</div>
+        <p class="feature-desc">See exactly what you made on every product after listing fees, transaction fees, payment processing, and offsite ads are deducted.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <div class="feature-title">Fee Breakdown</div>
+        <p class="feature-desc">Etsy charges you in layers. Suro untangles every fee category so you know exactly where your money is going each month.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📁</div>
+        <div class="feature-title">Tax-Ready Export</div>
+        <p class="feature-desc">Generate a clean, organized financial report at tax time. No more scrambling through spreadsheets or re-reading every transaction.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how">
+    <div class="section-eyebrow">How it works</div>
+    <h2 class="section-title">Three steps to clarity.</h2>
+    <p class="section-sub">No complicated setup. No API keys. Just upload and go.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">Download your CSV</div>
+        <p class="step-desc">Export your transaction data directly from Etsy's Payment Account page. Takes 30 seconds.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">Upload to Suro</div>
+        <p class="step-desc">Drop your CSV into Suro. We automatically parse every transaction, fee, and deduction.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">See your real numbers</div>
+        <p class="step-desc">Your dashboard shows true profit per listing, monthly summaries, and a tax-ready export — instantly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="early-access">
+    <div class="section-eyebrow">Early Access</div>
+    <h2 class="section-title">Be the first to know your real profit.</h2>
+    <p class="section-sub">Join the waitlist and get free early access when Suro launches. No credit card required.</p>
+    <div class="cta-form">
+      <input type="email" id="cta-email" placeholder="your@email.com" />
+      <button onclick="handleSignup('cta-email', 'cta-success')">Join Waitlist</button>
+    </div>
+    <div class="success-msg" id="cta-success">🌿 You're on the list — we'll be in touch soon!</div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="logo">Su<span>r</span>o</div>
+    <div class="footer-note">© 2026 Suro. Built for Etsy sellers who deserve clarity.</div>
+  </footer>
+
+  <script>
+    function handleSignup(inputId, successId) {
+      const input = document.getElementById(inputId);
+      const success = document.getElementById(successId);
+      const email = input.value.trim();
+
+      if (!email || !email.includes('@')) {
+        input.style.outline = '2px solid #C47A7A';
+        setTimeout(() => input.style.outline = '', 1500);
+        return;
+      }
+
+      input.style.display = 'none';
+      input.closest('.signup-form, .cta-form').querySelector('button').style.display = 'none';
+      success.style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>
